@@ -23,7 +23,7 @@ test("Moves down one item", function () {
 		vimotions.invoke("j");
 
 		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "Previous element should be unselected");
-		notEqual(list.children[1].className.indexOf("vimotions-selected"), -1, "Next item should now be selected");
+		notEqual(list.children[1].className.indexOf("vimotions-selected"), -1, "Current item should now be selected");
 	});
 
 test("Stays on last item", function () {
@@ -34,10 +34,40 @@ test("Stays on last item", function () {
 		vimotions.invoke("j");
 		vimotions.invoke("j");
 
-		notEqual(list.children[2].className.indexOf("vimotions-selected"), -1, "Next item should now be selected");
+		notEqual(list.children[2].className.indexOf("vimotions-selected"), -1, "Last item should be the only selected");
 
 		vimotions.invoke("j");
 		vimotions.invoke("j");
 
-		notEqual(list.children[2].className.indexOf("vimotions-selected"), -1, "Next item should now be selected");
+		notEqual(list.children[2].className.indexOf("vimotions-selected"), -1, "Should maintain the last item selected");
+  });
+
+module("'k' Motion");
+
+test("Moves up one item", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("j");
+		vimotions.invoke("j");
+		//list.children[1].className += " vimotions-selected"; // Select 2nd list item
+		vimotions.invoke("k");
+
+		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be selected");
+		equal(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be unselected");
+	});
+
+test("Stays on first item", function () {
+		expect(2);
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("j");
+		vimotions.invoke("j");
+		vimotions.invoke("k");
+
+		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be the only selected");
+
+		vimotions.invoke("k");
+		vimotions.invoke("k");
+
+		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "Should maintain the first item selected");
   });
