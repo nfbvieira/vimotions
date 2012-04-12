@@ -21,6 +21,14 @@ var vimotions = (function () {
 					}
 					removeClass(listItems[currentItem], "vimotions-selected");
 					listItems[currentItem - 1].className += " vimotions-selected";
+				},
+				"G": function () {
+					var lastItemIndex = listItems.length - 1;
+					if (currentItem > 0) {
+						removeClass(listItems[currentItem - 1], "vimotions-selected");
+					}
+					listItems[lastItemIndex].className += " vimotions-selected";
+					currentItem = lastItemIndex;
 				}
 			};
 

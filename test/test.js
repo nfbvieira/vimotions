@@ -71,3 +71,28 @@ test("Stays on first item", function () {
 
 		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "Should maintain the first item selected");
   });
+
+module("'G' Motion");
+
+test("Moves to last item", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("j");
+		vimotions.invoke("G");
+
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "Previous item should be unselected");
+		notEqual(list.children[list.children.length - 1].className.indexOf("vimotions-selected"), -1, "Last item should be selected");
+	});
+
+test("Stays on last item", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("G");
+		vimotions.invoke("G");
+		vimotions.invoke("G");
+		vimotions.invoke("G");
+
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be unselected");
+		equal(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be unselected");
+		notEqual(list.children[list.children.length - 1].className.indexOf("vimotions-selected"), -1, "Last item should be selected");
+});
