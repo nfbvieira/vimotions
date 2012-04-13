@@ -70,7 +70,25 @@ test("Stays on first item", function () {
 		vimotions.invoke("k");
 
 		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "Should maintain the first item selected");
-  });
+	});
+
+test("Mixing up and down motions", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		expect(5);
+		vimotions.invoke("k"); // Should do nothing, since no item was previously selected
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should not be selected");
+
+		vimotions.invoke("j"); // Move down to first item
+		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be selected");
+
+		vimotions.invoke("k"); // Move up (keeps first item selected)
+		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be selected");
+
+		vimotions.invoke("j"); // Move down to second item
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should now be unselected");
+		notEqual(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be selected");
+	});
 
 module("'G' Motion");
 
@@ -87,7 +105,6 @@ test("Moves to last item", function () {
 test("Stays on last item", function () {
 		var list = document.getElementsByTagName("ul")[0];
 		vimotions.bindTo(list);
-		vimotions.invoke("G");
 		vimotions.invoke("G");
 		vimotions.invoke("G");
 		vimotions.invoke("G");

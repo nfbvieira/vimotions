@@ -1,40 +1,43 @@
 var vimotions = (function () {
 		"use strict";
 
-		var listItems,
-			currentItem,
-			motionHandlers = {
-				"j": function () {
-					if (currentItem === listItems.length) {
-						return;
-					}
-					if (currentItem > 0) {
-						removeClass(listItems[currentItem - 1], "vimotions-selected");
-					}
-					listItems[currentItem].className += " vimotions-selected";
-					currentItem = currentItem + 1;
-				},
-				"k": function () {
-					currentItem = currentItem ? currentItem - 1 : 0;
-					if (currentItem === 0) {
-						return;
-					}
-					removeClass(listItems[currentItem], "vimotions-selected");
-					listItems[currentItem - 1].className += " vimotions-selected";
-				},
-				"G": function () {
-					var lastItemIndex = listItems.length - 1;
-					if (currentItem > 0) {
-						removeClass(listItems[currentItem - 1], "vimotions-selected");
-					}
-					listItems[lastItemIndex].className += " vimotions-selected";
-					currentItem = lastItemIndex;
-				}
-			};
+		function addClass(element, className) {
+			element.className += " " + className;
+		}
 
 		function removeClass(element, className) {
 			element.className = element.className.replace(new RegExp("(?:^|\\s)" + className + "(?!\\S)"), '');
 		}
+
+		var listItems,
+			currentItem,
+			motionHandlers = {
+				"j": function () {
+					if (!isNaN(currentItem)) {
+						removeClass(listItems[currentItem], "vimotions-selected");
+						currentItem = currentItem < listItems.length - 1 ? currentItem + 1 : currentItem;
+					} else {
+						currentItem = 0;
+					}
+					addClass(listItems[currentItem], "vimotions-selected");
+				},
+				"k": function () {
+					if (isNaN(currentItem)) {
+						return;
+					}
+					removeClass(listItems[currentItem], "vimotions-selected");
+					currentItem = currentItem > 0 ? currentItem - 1 : currentItem;
+					addClass(listItems[currentItem], "vimotions-selected");
+				},
+				"G": function () {
+					var lastItemIndex = listItems.length - 1;
+					if (!isNaN(currentItem)) {
+						removeClass(listItems[currentItem], "vimotions-selected");
+					}
+					currentItem = lastItemIndex;
+					addClass(listItems[currentItem], "vimotions-selected");
+				}
+			};
 
 		function handler(evt) {
 			if (evt.keyCode === 16) {
@@ -42,13 +45,13 @@ var vimotions = (function () {
 			}
 			var char = String.fromCharCode(evt.keyCode);
 			char = evt.shiftKey ? char : char.toLowerCase();
-			console.log(char);
+			motionHandlers[char] && motionHandlers[char]();
 		}
 
 		return {
 			bindTo: function (list) {
 				listItems = list.children;
-				currentItem = 0;
+				currentItem = NaN;
 				document.addEventListener("keydown", handler, false);
 			},
 			invoke: function (motion) {
