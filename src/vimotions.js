@@ -11,22 +11,25 @@ var vimotions = (function () {
 
 		var listItems,
 			currentItem,
+			stack = [],
 			motionHandlers = {
-				"j": function () {
+				"j": function (count) {
+					count = typeof count !== "undefined" ? count : 1;
 					if (!isNaN(currentItem)) {
 						removeClass(listItems[currentItem], "vimotions-selected");
-						currentItem = currentItem < listItems.length - 1 ? currentItem + 1 : currentItem;
 					} else {
-						currentItem = 0;
+						currentItem = -1;
 					}
+					currentItem = currentItem + count < listItems.length ? currentItem + count : listItems.length - 1;
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
-				"k": function () {
+				"k": function (count) {
+					count = typeof count !== "undefined" ? count : 1;
 					if (isNaN(currentItem)) {
 						return;
 					}
 					removeClass(listItems[currentItem], "vimotions-selected");
-					currentItem = currentItem > 0 ? currentItem - 1 : currentItem;
+					currentItem = currentItem - count >= 0 ? currentItem - count : 0;
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
 				"G": function () {
@@ -39,13 +42,28 @@ var vimotions = (function () {
 				}
 			};
 
-		function handler(evt) {
-			if (evt.keyCode === 16) {
-				return;
+		function getCountFrom(stack) {
+			var count = 0;
+			for (var i = 0; i < stack.length; i++) {
+				var parsed = parseInt(stack.pop(), 10);
+				if (isNaN(parsed)) {
+					break;
+				}
+				count += parsed * Math.pow(10, i);
 			}
+			return count || 1;
+		}
+
+		function handler(evt) {
 			var char = String.fromCharCode(evt.keyCode);
 			char = evt.shiftKey ? char : char.toLowerCase();
-			motionHandlers[char] && motionHandlers[char]();
+
+			if (!motionHandlers[char]) {
+				stack.push(char);
+			} else {
+				var count = getCountFrom(stack);
+				motionHandlers[char](count);
+			}
 		}
 
 		return {
