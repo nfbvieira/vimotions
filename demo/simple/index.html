@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Simple demo</title>
+		<link rel="stylesheet" href="styles.css" />
+		<script type="text/javascript" src="../../src/vimotions.js"></script>
+	</head>
+	<body>
+		<ul id="theList">
+			<li>Vim rocks!</li>
+			<li>w00t? <strong>j</strong> for down and <strong>k</strong> for up?!</li>
+			<li>You mean I can even go down multiple items with <strong><em>count</em> j</strong>?</li>
+			<li>...and up with <strong><em>count</em> k</strong>?</li>
+			<li>Sweet!</li>
+		</ul>
+		<script type="text/javascript">
+			var list = document.getElementById("theList");
+			vimotions.bindTo(list);
+		</script>
+	</body>
+</html>
