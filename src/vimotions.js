@@ -6,7 +6,9 @@ var vimotions = (function () {
 		}
 
 		function removeClass(element, className) {
-			element.className = element.className.replace(new RegExp("(?:^|\\s)" + className + "(?!\\S)"), '');
+			element.className = element.className.replace(
+				new RegExp("(?:^|\\s)" + className + "(?!\\S)"),
+				'');
 		}
 
 		var listItems,
@@ -20,7 +22,9 @@ var vimotions = (function () {
 					} else {
 						currentItem = -1;
 					}
-					currentItem = currentItem + count < listItems.length ? currentItem + count : listItems.length - 1;
+					currentItem = currentItem + count < listItems.length ?
+						currentItem + count :
+						listItems.length - 1;
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
 				"k": function (count) {
@@ -32,31 +36,44 @@ var vimotions = (function () {
 					currentItem = currentItem - count >= 0 ? currentItem - count : 0;
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
-				"G": function () {
-					var lastItemIndex = listItems.length - 1;
+				"G": function (item) {
 					if (!isNaN(currentItem)) {
 						removeClass(listItems[currentItem], "vimotions-selected");
 					}
-					currentItem = lastItemIndex;
+					currentItem = typeof item !== "undefined" && item <= listItems.length ?
+						item - 1 :
+						listItems.length - 1;
 					addClass(listItems[currentItem], "vimotions-selected");
 				}
 			};
 
 		function getCountFrom(stack) {
-			var count = 0;
-			for (var i = 0; i < stack.length; i++) {
+			var count = 0, exponent = 0;
+			while (stack.length) {
 				var parsed = parseInt(stack.pop(), 10);
 				if (isNaN(parsed)) {
 					break;
 				}
-				count += parsed * Math.pow(10, i);
+				count += parsed * Math.pow(10, exponent);
+				exponent += 1;
 			}
-			return count || 1;
+			return count || undefined;
+		}
+
+		function isAllowedCharacter(character) {
+			var charCode = character.charCodeAt(0);
+			return !isNaN(parseInt(character, 10)) ||
+				(charCode >= "a".charCodeAt(0) && charCode <= "z".charCodeAt(0)) ||
+				(charCode >= "A".charCodeAt(0) && charCode <= "Z".charCodeAt(0));
 		}
 
 		function handler(evt) {
 			var char = String.fromCharCode(evt.keyCode);
 			char = evt.shiftKey ? char : char.toLowerCase();
+
+			if (!isAllowedCharacter(char)) { // Avoid stack pollution
+				return;
+			}
 
 			if (!motionHandlers[char]) {
 				stack.push(char);
@@ -72,8 +89,8 @@ var vimotions = (function () {
 				currentItem = NaN;
 				document.addEventListener("keydown", handler, false);
 			},
-			invoke: function (motion) {
-				motionHandlers[motion]();
+			invoke: function (motion, param) {
+				motionHandlers[motion](param);
 			}
 		};
 	}());

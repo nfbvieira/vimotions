@@ -26,6 +26,25 @@ test("Moves down one item", function () {
 		notEqual(list.children[1].className.indexOf("vimotions-selected"), -1, "Current item should now be selected");
 	});
 
+test("Moves down [count] items", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("j", 2);
+
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "First element should be unselected");
+		notEqual(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be selected");
+	});
+
+test("Moves down to last item when [count] exceeds number of items", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("j", 123);
+
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "First element should be unselected");
+		equal(list.children[1].className.indexOf("vimotions-selected"), -1, "Second element should be unselected");
+		notEqual(list.children[2].className.indexOf("vimotions-selected"), -1, "Last item should be selected");
+	});
+
 test("Stays on last item", function () {
 		expect(2);
 		var list = document.getElementsByTagName("ul")[0];
@@ -49,7 +68,6 @@ test("Moves up one item", function () {
 		vimotions.bindTo(list);
 		vimotions.invoke("j");
 		vimotions.invoke("j");
-		//list.children[1].className += " vimotions-selected"; // Select 2nd list item
 		vimotions.invoke("k");
 
 		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be selected");
@@ -72,6 +90,28 @@ test("Stays on first item", function () {
 		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "Should maintain the first item selected");
 	});
 
+test("Moves up [count] items", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("j", 3);
+		vimotions.invoke("k", 2);
+
+		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be selected");
+		equal(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be unselected");
+		equal(list.children[2].className.indexOf("vimotions-selected"), -1, "Third item should be unselected");
+	});
+
+test("Moves up to first item when [count] exceeds number of previous items", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("j", 3);
+		vimotions.invoke("k", 123);
+
+		notEqual(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be selected");
+		equal(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be unselected");
+		equal(list.children[2].className.indexOf("vimotions-selected"), -1, "Last item should be unselected");
+	});
+
 test("Mixing up and down motions", function () {
 		var list = document.getElementsByTagName("ul")[0];
 		vimotions.bindTo(list);
@@ -92,7 +132,7 @@ test("Mixing up and down motions", function () {
 
 module("'G' Motion");
 
-test("Moves to last item", function () {
+test("Moves to last item when no item number is given", function () {
 		var list = document.getElementsByTagName("ul")[0];
 		vimotions.bindTo(list);
 		vimotions.invoke("j");
@@ -113,3 +153,23 @@ test("Stays on last item", function () {
 		equal(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be unselected");
 		notEqual(list.children[list.children.length - 1].className.indexOf("vimotions-selected"), -1, "Last item should be selected");
 });
+
+test("Moves to item passed as parameter", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("G", 2);
+
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be unselected");
+		notEqual(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be selected");
+		equal(list.children[2].className.indexOf("vimotions-selected"), -1, "Third item should be unselected");
+	});
+
+test("Moves to last item if argument is bigger than total items", function () {
+		var list = document.getElementsByTagName("ul")[0];
+		vimotions.bindTo(list);
+		vimotions.invoke("G", 123);
+
+		equal(list.children[0].className.indexOf("vimotions-selected"), -1, "First item should be unselected");
+		equal(list.children[1].className.indexOf("vimotions-selected"), -1, "Second item should be unselected");
+		notEqual(list.children[2].className.indexOf("vimotions-selected"), -1, "Last item should be selected");
+	});
