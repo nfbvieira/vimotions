@@ -8,7 +8,8 @@ var vimotions = (function () {
 		function removeClass(element, className) {
 			element.className = element.className.replace(
 				new RegExp("(?:^|\\s)" + className + "(?!\\S)"),
-				'');
+				''
+			);
 		}
 
 		var listItems,
@@ -23,8 +24,8 @@ var vimotions = (function () {
 						currentItem = -1;
 					}
 					currentItem = currentItem + count < listItems.length ?
-						currentItem + count :
-						listItems.length - 1;
+							currentItem + count :
+							listItems.length - 1;
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
 				"k": function (count) {
@@ -41,16 +42,16 @@ var vimotions = (function () {
 						removeClass(listItems[currentItem], "vimotions-selected");
 					}
 					currentItem = typeof item !== "undefined" && item <= listItems.length ?
-						item - 1 :
-						listItems.length - 1;
+							item - 1 :
+							listItems.length - 1;
 					addClass(listItems[currentItem], "vimotions-selected");
 				}
 			};
 
 		function getCountFrom(stack) {
-			var count = 0, exponent = 0;
+			var count = 0, exponent = 0, parsed;
 			while (stack.length) {
-				var parsed = parseInt(stack.pop(), 10);
+				parsed = parseInt(stack.pop(), 10);
 				if (isNaN(parsed)) {
 					break;
 				}
@@ -68,7 +69,7 @@ var vimotions = (function () {
 		}
 
 		function handler(evt) {
-			var char = String.fromCharCode(evt.keyCode);
+			var char = String.fromCharCode(evt.keyCode), count;
 			char = evt.shiftKey ? char : char.toLowerCase();
 
 			if (!isAllowedCharacter(char)) { // Avoid stack pollution
@@ -78,7 +79,7 @@ var vimotions = (function () {
 			if (!motionHandlers[char]) {
 				stack.push(char);
 			} else {
-				var count = getCountFrom(stack);
+				count = getCountFrom(stack);
 				motionHandlers[char](count);
 			}
 		}
