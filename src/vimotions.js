@@ -45,6 +45,15 @@ var vimotions = (function () {
 							item - 1 :
 							listItems.length - 1;
 					addClass(listItems[currentItem], "vimotions-selected");
+				},
+				"gg": function (item) {
+					if (!isNaN(currentItem)) {
+						removeClass(listItems[currentItem], "vimotions-selected");
+					}
+					currentItem = typeof item !== "undefined" ?
+							(item <= listItems.length ? item - 1 : listItems.length - 1) :
+							0;
+					addClass(listItems[currentItem], "vimotions-selected");
 				}
 			};
 
@@ -68,19 +77,27 @@ var vimotions = (function () {
 				(charCode >= "A".charCodeAt(0) && charCode <= "Z".charCodeAt(0));
 		}
 
+		stack.peek = function () { return stack[stack.length - 1]; };
+
 		function handler(evt) {
-			var char = String.fromCharCode(evt.keyCode), count;
+			var char = String.fromCharCode(evt.keyCode), count, motion;
 			char = evt.shiftKey ? char : char.toLowerCase();
 
 			if (!isAllowedCharacter(char)) { // Avoid stack pollution
 				return;
 			}
 
-			if (!motionHandlers[char]) {
+			// Ugly
+			motion = motionHandlers[char];
+			if (!motion && (motion = motionHandlers[stack.peek() + char])) {
+				stack.pop();
+			}
+
+			if (!motion) {
 				stack.push(char);
 			} else {
 				count = getCountFrom(stack);
-				motionHandlers[char](count);
+				motion(count);
 			}
 		}
 
