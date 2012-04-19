@@ -3,6 +3,8 @@
 **vimotions** aims to provide an easy way to assign Vi/Vim motions to
 list-like DOM elements.
 
+Check out a [simple demo](http://nfbvieira.github.com/vimotions/demo/simple)
+
 ## Usage
 
 ```html
@@ -20,7 +22,7 @@ list-like DOM elements.
 ## Contributing
 
 If you spot a bug or want to see some new feature, please 
-[create a new issue](https://github.com/nunovieira/vimotions/issues/new).
+[create a new issue](https://github.com/nfbvieira/vimotions/issues/new).
 
 ## Copyright
 
