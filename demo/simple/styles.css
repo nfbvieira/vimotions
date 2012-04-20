@@ -1,3 +1,48 @@
 .vimotions-selected {
-	border: 1px solid red;
+	background-color: #D1510D;
+}
+
+body {
+	background-color: #302825;
+}
+
+h1 {
+	font: bold 40px Georgia, serif;
+	color: #BFBFBF;
+	text-shadow: 2px 2px 1px #000000;
+}
+
+ol {
+	padding: 20px 30px;
+	width: 500px;
+	counter-reset: li;
+	list-style-type: none;
+}
+
+ol li:before {
+	counter-increment: li;
+	content: counter(li);
+	font: 36px Georgia, serif;
+	color: #6C727F;
+	padding: 0 15px;
+}
+
+ol li {
+	background-color: #FFF4D1;
+	height: 50px;
+	margin-bottom: 1px;
+	font: 14px 'Trebuchet MS', Helvetica, sans-serif;
+	color: #111111;
+}
+
+a, a:visited {
+	background-color: #FFF4D1;
+	padding: 5px 10px;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', Helvetica, sans-serif;
+	color: #111111;
+}
+
+a:hover {
+	background-color: #D1510D;
 }
