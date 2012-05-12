@@ -210,3 +210,19 @@ test('Moves to last item if argument is bigger than total items', function () {
 		ok(!isSelected(list.children[1]), 'Second item should be unselected');
 		ok(isSelected(list.children[2]), 'Last item should be selected');
 	});
+
+module('Empty list', {
+	setup: function() {
+		var emptyList = document.getElementById('empty-list');
+		vimotions.bindTo(emptyList);
+	}
+});
+
+test('Doesn\'t throw when invoking on empty list', function() {
+		expect(0);
+
+		vimotions.invoke('j');
+		vimotions.invoke('k');
+		vimotions.invoke('gg');
+		vimotions.invoke('G');
+	});

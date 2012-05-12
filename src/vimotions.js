@@ -17,6 +17,9 @@ var vimotions = (function () {
 			stack = [],
 			motionHandlers = {
 				"j": function (count) {
+					if (listItems.length === 0) {
+						return;
+					}
 					count = typeof count !== "undefined" ? count : 1;
 					if (!isNaN(currentItem)) {
 						removeClass(listItems[currentItem], "vimotions-selected");
@@ -29,6 +32,9 @@ var vimotions = (function () {
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
 				"k": function (count) {
+					if (listItems.length === 0) {
+						return;
+					}
 					count = typeof count !== "undefined" ? count : 1;
 					if (isNaN(currentItem)) {
 						return;
@@ -38,6 +44,9 @@ var vimotions = (function () {
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
 				"G": function (item) {
+					if (listItems.length === 0) {
+						return;
+					}
 					if (!isNaN(currentItem)) {
 						removeClass(listItems[currentItem], "vimotions-selected");
 					}
@@ -47,6 +56,9 @@ var vimotions = (function () {
 					addClass(listItems[currentItem], "vimotions-selected");
 				},
 				"gg": function (item) {
+					if (listItems.length === 0) {
+						return;
+					}
 					if (!isNaN(currentItem)) {
 						removeClass(listItems[currentItem], "vimotions-selected");
 					}
